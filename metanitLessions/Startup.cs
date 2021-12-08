@@ -31,12 +31,20 @@ namespace metanitLessions
                 app.UseExceptionHandler("/error");
             }
 
+            app.UseStatusCodePages();
+
             app.UseRouting();
 
-            app.Map("/error", ap => ap.Run(async context =>
+            app.Map("/error", ap => ap.Run(async (context) =>
             {
                 await context.Response.WriteAsync("DivideByZeroException occured!");
             }));
+
+            app.Map("/hello", ap => ap.Run(async (context) =>
+            {
+                await context.Response.WriteAsync($"Hello ASP.NET Core");
+            }));
+
 
             app.UseEndpoints(endpoints =>
             {
