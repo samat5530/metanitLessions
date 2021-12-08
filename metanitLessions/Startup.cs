@@ -32,7 +32,9 @@ namespace metanitLessions
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    int x = 0;
+                    int y = 8 / x;
+                    await context.Response.WriteAsync($"result = {y}");
                 });
             });
         }
