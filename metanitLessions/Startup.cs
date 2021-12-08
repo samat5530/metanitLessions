@@ -26,8 +26,17 @@ namespace metanitLessions
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
 
             app.UseRouting();
+
+            app.Map("/error", ap => ap.Run(async context =>
+            {
+                await context.Response.WriteAsync("DivideByZeroException occured!");
+            }));
 
             app.UseEndpoints(endpoints =>
             {
