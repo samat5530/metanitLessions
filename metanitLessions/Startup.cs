@@ -31,13 +31,18 @@ namespace metanitLessions
                 app.UseExceptionHandler("/error");
             }
 
-            app.UseStatusCodePages();
+            app.UseStatusCodePages("text/plain", "Error. Status Code : {0}");
+
+            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
 
             app.UseRouting();
 
             app.Map("/error", ap => ap.Run(async (context) =>
+
             {
-                await context.Response.WriteAsync("DivideByZeroException occured!");
+
+                await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
+                //await context.Response.WriteAsync("DivideByZeroException occured!");
             }));
 
             app.Map("/hello", ap => ap.Run(async (context) =>
@@ -48,7 +53,7 @@ namespace metanitLessions
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/main", async context =>
                 {
                     int x = 0;
                     int y = 8 / x;
