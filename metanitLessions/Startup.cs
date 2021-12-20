@@ -22,17 +22,24 @@ namespace metanitLessions
 
             services.AddTransient<IMessageSender, SMSMessageSendercs>();
             services.AddTransient<TimeService>();
+            services.AddTransient<MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMessageSender messageSender, TimeService timeService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.Run(async (context) => 
+            /*
+            app.Run(async context =>
             {
+                //IMessageSender messageSender = context.RequestServices.GetService<IMessageSender>();
+                IMessageSender messageSender = app.ApplicationServices.GetService<IMessageSender>();
+
                 context.Response.ContentType = "text/html; charset=utf-8";
-                await context.Response.WriteAsync( $"Текущее время {timeService?.GetTime()}");
-            }
-            );
+                await context.Response.WriteAsync(messageSender.Send());
+            });
+            */
+
+            app.UseMiddleware<MessageMiddleware>();
         }
     }
 }
